@@ -172,7 +172,7 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageFilena
         }
     }
 
-    string strPrefixLeft = strPathToSequence + "/image_0/";
+    string strPrefixLeft = strPathToSequence + "/image_2/";
 
     const int nTimes = vTimestamps.size();
     vstrImageFilenames.resize(nTimes);
@@ -181,6 +181,6 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageFilena
     {
         stringstream ss;
         ss << setfill('0') << setw(6) << i;
-        vstrImageFilenames[i] = strPrefixLeft + ss.str() + ".png";
+        vstrImageFilenames[i] = strPrefixLeft + ss.str() + ".jpg";
     }
 }

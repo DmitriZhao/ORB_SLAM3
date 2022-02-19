@@ -33,10 +33,18 @@ void LoadImages(const string &strSequence, vector<string> &vstrImageFilenames,
 
 int main(int argc, char **argv)
 {
-    if(argc != 4)
+    if(argc != 5 && argc != 4)
     {
-        cerr << endl << "Usage: ./mono_kitti path_to_vocabulary path_to_settings path_to_sequence" << endl;
+        cerr << endl << "Usage: ./mono_kitti path_to_vocabulary path_to_settings path_to_sequence (trajectory_file_name)" << endl;
         return 1;
+    }
+
+    bool bFileName= (5 == argc);
+    string file_name;
+    if (bFileName)
+    {
+        file_name = string(argv[argc-1]);
+        cout << "file name: " << file_name << endl;
     }
 
     // Retrieve paths to images
@@ -148,7 +156,18 @@ int main(int argc, char **argv)
     cout << "mean tracking time: " << totaltime/nImages << endl;
 
     // Save camera trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");    
+    if (bFileName)
+    {
+        const string f_file =  "f_" + file_name + ".txt";
+        const string kf_file =  "kf_" + file_name + ".txt";
+        SLAM.SaveTrajectoryEuRoC(f_file);
+        SLAM.SaveKeyFrameTrajectoryEuRoC(kf_file);
+    }
+    else
+    {
+        SLAM.SaveTrajectoryEuRoC("CameraTrajectory.txt");
+        SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+    }
 
     return 0;
 }
@@ -172,7 +191,7 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageFilena
         }
     }
 
-    string strPrefixLeft = strPathToSequence + "/image_0/";
+    string strPrefixLeft = strPathToSequence + "/image_2/";
 
     const int nTimes = vTimestamps.size();
     vstrImageFilenames.resize(nTimes);
@@ -181,6 +200,6 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageFilena
     {
         stringstream ss;
         ss << setfill('0') << setw(6) << i;
-        vstrImageFilenames[i] = strPrefixLeft + ss.str() + ".png";
+        vstrImageFilenames[i] = strPrefixLeft + ss.str() + ".jpg";
     }
 }
