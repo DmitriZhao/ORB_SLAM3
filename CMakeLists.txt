@@ -178,6 +178,10 @@ add_executable(mono_inertial_tum_vi
 Examples/Monocular-Inertial/mono_inertial_tum_vi.cc)
 target_link_libraries(mono_inertial_tum_vi ${PROJECT_NAME})
 
+add_executable(mono_inertial_kitti
+Examples/Monocular-Inertial/mono_inertial_kitti.cc)
+target_link_libraries(mono_inertial_kitti ${PROJECT_NAME})
+
 # Stereo-Inertial examples
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Stereo-Inertial)
 
@@ -189,3 +193,6 @@ add_executable(stereo_inertial_tum_vi
 Examples/Stereo-Inertial/stereo_inertial_tum_vi.cc)
 target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 
+add_executable(stereo_inertial_kitti
+Examples/Stereo-Inertial/stereo_inertial_kitti.cc)
+target_link_libraries(stereo_inertial_kitti ${PROJECT_NAME})

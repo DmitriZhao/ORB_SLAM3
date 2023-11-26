@@ -33,11 +33,16 @@ void LoadImages(const string &strSequence, vector<string> &vstrImageFilenames,
 
 int main(int argc, char **argv)
 {
-    if(argc != 4)
+    if(argc < 4)
     {
-        cerr << endl << "Usage: ./mono_kitti path_to_vocabulary path_to_settings path_to_sequence" << endl;
+        cerr << endl << "Usage: ./mono_kitti path_to_vocabulary path_to_settings path_to_sequence (trajectory_file_name)" << endl;
         return 1;
     }
+    bool bFileName = (argc == 5);
+    std::string file_name;
+    if (bFileName)
+        file_name = argv[4];
+    std::cout << "trajectory_file_name: " << file_name << std::endl;
 
     // Retrieve paths to images
     vector<string> vstrImageFilenames;
@@ -47,7 +52,7 @@ int main(int argc, char **argv)
     int nImages = vstrImageFilenames.size();
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,true, 0, file_name);
 
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
@@ -112,8 +117,8 @@ int main(int argc, char **argv)
     cout << "mean tracking time: " << totaltime/nImages << endl;
 
     // Save camera trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");    
-
+    SLAM.SaveTrajectoryTUM("f_" + file_name + "_tum.txt");
+    SLAM.SaveKeyFrameTrajectoryTUM("kf_" + file_name + "_tum.txt");
     return 0;
 }
 

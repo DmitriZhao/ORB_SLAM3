@@ -50,3 +50,4 @@ cmake-build-debug/
 *.osa
 
 .idea/
+.vscode/
