@@ -206,7 +206,7 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
                 vector<string> &vstrImageRight, vector<double> &vTimestamps)
 {
     ifstream fTimes;
-    string strPathTimeFile = strPathToSequence + "/times.txt";
+    string strPathTimeFile = strPathToSequence + "/timestamps.txt";
     fTimes.open(strPathTimeFile.c_str());
     while(!fTimes.eof())
     {
@@ -218,7 +218,7 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
             ss << s;
             double t;
             ss >> t;
-            vTimestamps.push_back(t);
+            vTimestamps.push_back(t/1e9);
         }
     }
 
@@ -272,8 +272,8 @@ void LoadIMU(const string &strImuPath, vector<double> &vTimeStamps, vector<cv::P
             vGyro.push_back(cv::Point3f(data[1],data[2],data[3]));
         }
     }
-    double vTimeStamp = vTimeStamps[0];
-    for(double &vTime : vTimeStamps) {
-        vTime -= vTimeStamp;
-    }
+//    double vTimeStamp = vTimeStamps[0];
+//    for(double &vTime : vTimeStamps) {
+//        vTime -= vTimeStamp;
+//    }
 }

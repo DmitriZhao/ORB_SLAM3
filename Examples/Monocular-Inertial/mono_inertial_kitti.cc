@@ -68,15 +68,28 @@ int main(int argc, char **argv)
    if((nImages<=0)||(nImu<=0))
    {
       cerr << "ERROR: Failed to load images or IMU for sequence" << endl;
+      cerr << "nImages: " << nImages << endl;
+      cerr << "nImu: " << nImu << endl;
       return 1;
    }
 
     // JC Modified:
     // Find first imu to be considered, supposing imu measurements start first
+    if(vTimestampsImu[first_imu]>vTimestampsCam[0]) {
+        std::cout << "Camera start first!" << std::endl;
+    }
     while(vTimestampsImu[first_imu]<=vTimestampsCam[0])
         first_imu++;
     first_imu--; // first imu measurement to be considered
+    std::cout << "Find first imu: " << first_imu << std::endl;
 
+//    double t0 = vTimestampsImu[first_imu];
+//    for(double &t : vTimestampsImu) {
+//        t -= t0;
+//    }
+//    for(double &t : vTimestampsCam) {
+//        t -= t0;
+//    }
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
     ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_MONOCULAR, true, 0, file_name);
@@ -179,7 +192,7 @@ int main(int argc, char **argv)
 void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft, vector<double> &vTimestamps)
 {
     ifstream fTimes;
-    string strPathTimeFile = strPathToSequence + "/times.txt";
+    string strPathTimeFile = strPathToSequence + "/timestamps.txt";
     fTimes.open(strPathTimeFile.c_str());
     while(!fTimes.eof())
     {
@@ -191,7 +204,7 @@ void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft, 
             ss << s;
             double t;
             ss >> t;
-            vTimestamps.push_back(t);
+            vTimestamps.push_back(t / 1e9);
         }
     }
 
@@ -242,8 +255,8 @@ void LoadIMU(const string &strImuPath, vector<double> &vTimeStamps, vector<cv::P
             vGyro.push_back(cv::Point3f(data[1],data[2],data[3]));
         }
     }
-    double vTimeStamp = vTimeStamps[0];
-    for(double &vTime : vTimeStamps) {
-        vTime -= vTimeStamp;
-    }
+//    double vTimeStamp = vTimeStamps[0];
+//    for(double &vTime : vTimeStamps) {
+//        vTime -= vTimeStamp;
+//    }
 }
