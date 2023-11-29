@@ -7,15 +7,15 @@ ENDIF()
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native -Wall -O3")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native -Wall -O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-deprecated -O3 -march=native ")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-deprecated -O3 -march=native")
 
-# Check C++20 support
+# Check c++20 support
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++20" COMPILER_SUPPORTS_CXX14)
 if(COMPILER_SUPPORTS_CXX14)
@@ -28,6 +28,8 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
+find_package(ZLIB REQUIRED)
+find_package(OpenEXR REQUIRED)
 find_package(OpenCV 4.0)
 if(NOT OpenCV_FOUND)
   find_package(OpenCV 3.0)
@@ -120,6 +122,7 @@ ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
 -lboost_serialization
 -lcrypto
+${ZLIB_LIBRARIES}
 )
 
 
@@ -148,10 +151,6 @@ add_executable(stereo_tum_vi
 Examples/Stereo/stereo_tum_vi.cc)
 target_link_libraries(stereo_tum_vi ${PROJECT_NAME})
 
-add_executable(stereo_malaga
-Examples/Stereo/stereo_malaga.cc)
-target_link_libraries(stereo_malaga ${PROJECT_NAME})
-
 # Monocular examples
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
 
@@ -171,10 +170,6 @@ add_executable(mono_tum_vi
 Examples/Monocular/mono_tum_vi.cc)
 target_link_libraries(mono_tum_vi ${PROJECT_NAME})
 
-add_executable(mono_malaga
-Examples/Monocular/mono_malaga.cc)
-target_link_libraries(mono_malaga ${PROJECT_NAME})
-
 # Monocular-Inertial examples
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular-Inertial)
 
@@ -185,10 +180,6 @@ target_link_libraries(mono_inertial_euroc ${PROJECT_NAME})
 add_executable(mono_inertial_tum_vi
 Examples/Monocular-Inertial/mono_inertial_tum_vi.cc)
 target_link_libraries(mono_inertial_tum_vi ${PROJECT_NAME})
-
-add_executable(mono_inertial_kitti
-Examples/Monocular-Inertial/mono_inertial_kitti.cc)
-target_link_libraries(mono_inertial_kitti ${PROJECT_NAME})
 
 # Stereo-Inertial examples
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Stereo-Inertial)
@@ -201,10 +192,3 @@ add_executable(stereo_inertial_tum_vi
 Examples/Stereo-Inertial/stereo_inertial_tum_vi.cc)
 target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 
-add_executable(stereo_inertial_kitti
-Examples/Stereo-Inertial/stereo_inertial_kitti.cc)
-target_link_libraries(stereo_inertial_kitti ${PROJECT_NAME})
-
-add_executable(stereo_inertial_malaga
-Examples/Stereo-Inertial/stereo_inertial_malaga.cc)
-target_link_libraries(stereo_inertial_malaga ${PROJECT_NAME})

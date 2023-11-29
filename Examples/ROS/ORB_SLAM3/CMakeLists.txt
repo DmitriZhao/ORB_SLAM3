@@ -12,15 +12,15 @@ MESSAGE("Build type: " ${ROS_BUILD_TYPE})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 -march=native ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall  -O3 -march=native")
 
-# Check C++14 support
+# Check c++20 support
 include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
+CHECK_CXX_COMPILER_FLAG("-std=c++20" COMPILER_SUPPORTS_CXX14)
 if(COMPILER_SUPPORTS_CXX14)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
    add_definitions(-DCOMPILEDWITHC11)
-   message(STATUS "Using flag -std=c++14.")
+   message(STATUS "Using flag -std=c++20.")
 else()
-   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
+   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no c++20 support. Please use a different C++ compiler.")
 endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../../cmake_modules)
